@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # IRCTC Clone - Train Booking Web Application
 
 A full-stack, modern web application for searching and booking train tickets. This project demonstrates complete CRUD operations with a responsive React frontend, Express.js backend, and SQLite database.
@@ -336,3 +337,6 @@ This project is open source and available for educational purposes.
 **Happy Train Booking! 🚂**
 
 Built with ❤️ using React, Express, and SQLite
+=======
+# IRCTC_PROJECT
+>>>>>>> 9e58aab4f7b13ec1de020d7827e57ca129a24144
