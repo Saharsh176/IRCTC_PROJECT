@@ -1,0 +1,287 @@
+.train-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.train-list h2 {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.train-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.train-card:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.train-header {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1.5fr auto;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: center;
+  cursor: pointer;
+  background: white;
+  transition: background 0.3s ease;
+}
+
+.train-header:hover {
+  background: #f9f9f9;
+}
+
+.train-info h3 {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.train-info .route {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.train-info .journey-date {
+  color: #667eea;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.train-info .days-running {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.days-label {
+  color: #666;
+  font-weight: 400;
+}
+
+.train-times {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  text-align: center;
+}
+
+.time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.station {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.duration {
+  padding: 0 1rem;
+  text-align: center;
+  color: #666;
+  font-size: 0.85rem;
+  border-left: 2px solid #e0e0e0;
+  border-right: 2px solid #e0e0e0;
+}
+
+.train-price {
+  text-align: right;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.seats-available {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #667eea;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.expand-btn:hover {
+  transform: scale(1.2);
+}
+
+.train-details {
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-top: 2px solid #e0e0e0;
+}
+
+.booking-section {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.passenger-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.passenger-selector label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.passenger-selector input {
+  width: 100px;
+  padding: 0.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.price-summary {
+  text-align: center;
+}
+
+.price-summary p {
+  color: #333;
+  font-size: 1rem;
+}
+
+.price-summary strong {
+  color: #667eea;
+  font-size: 1.3rem;
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+.book-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.book-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.train-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.train-meta p {
+  margin: 0;
+}
+
+.train-meta strong {
+  color: #333;
+}
+
+.no-trains {
+  background: white;
+  padding: 3rem;
+  border-radius: 10px;
+  text-align: center;
+  color: #666;
+}
+
+.no-trains p {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 1024px) {
+  .train-header {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .train-times {
+    grid-column: 1 / -1;
+  }
+
+  .train-price {
+    text-align: left;
+    grid-column: 1;
+  }
+
+  .expand-btn {
+    grid-column: 2;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 768px) {
+  .train-header {
+    grid-template-columns: 1fr;
+  }
+
+  .train-times {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .train-price {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .expand-btn {
+    grid-column: 1;
+    margin-top: 1rem;
+  }
+
+  .booking-section {
+    grid-template-columns: 1fr;
+  }
+
+  .train-meta {
+    grid-template-columns: 1fr;
+  }
+}
