@@ -1,8 +1,8 @@
 #!/bin/bash
-# 🚀 IRCTC Clone - Complete Setup & Run Script
+# 🚀 Rail Connect - Complete Setup & Run Script
 
 echo "=========================================="
-echo "       IRCTC Clone - Full Stack App"
+echo "       Rail Connect - Full Stack App"
 echo "=========================================="
 echo ""
 
@@ -12,7 +12,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-PROJECT_ROOT="/Users/harshul/IRCTC_Clone"
+PROJECT_ROOT="/Users/harshul/Rail_Connect"
 
 # Function to check if a port is in use
 is_port_in_use() {

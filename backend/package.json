@@ -1,14 +1,14 @@
 {
-  "name": "irctc-backend",
+  "name": "rail-connect-backend",
   "version": "1.0.0",
-  "description": "Backend API for IRCTC Clone",
+  "description": "Backend API for Rail Connect",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "keywords": ["irctc", "trains", "booking"],
+  "keywords": ["rail", "trains", "booking"],
   "author": "",
   "license": "ISC",
   "dependencies": {

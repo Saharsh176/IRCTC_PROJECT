@@ -1,6 +1,6 @@
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 
-## IRCTC Clone - Full Stack Application (Complete)
+## Rail Connect - Full Stack Application (Complete)
 
 ### 🎯 Project Status: PRODUCTION READY
 
@@ -43,11 +43,11 @@ A complete full-stack train booking web application with React frontend, Express
 
 ```bash
 # Terminal 1: Start Backend
-cd /Users/harshul/IRCTC_Clone/backend
+cd /Users/harshul/Rail_Connect/backend
 npm start
 
 # Terminal 2: Start Frontend
-cd /Users/harshul/IRCTC_Clone
+cd /Users/harshul/Rail_Connect
 npm run dev
 
 # Open http://localhost:5173

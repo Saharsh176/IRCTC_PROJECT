@@ -1,4 +1,4 @@
-# 🚂 IRCTC Clone - Project Summary
+# 🚂 Rail Connect - Project Summary
 
 ## ✅ Project Complete: Full-Stack Train Booking Application
 
@@ -9,7 +9,7 @@ A fully functional, production-ready web application for train ticket booking wi
 ## 📊 What's Been Built
 
 ### 🎨 Frontend (React + TypeScript + Vite)
-**Location:** `/Users/harshul/IRCTC_Clone/src`
+**Location:** `/Users/harshul/Rail_Connect/src`
 
 **Components:**
 1. **TrainSearch.tsx** - Search interface with station selection
@@ -26,7 +26,7 @@ A fully functional, production-ready web application for train ticket booking wi
 **Running On:** `http://localhost:5173`
 
 ### 🔌 Backend (Express.js + SQLite)
-**Location:** `/Users/harshul/IRCTC_Clone/backend`
+**Location:** `/Users/harshul/Rail_Connect/backend`
 
 **Core Modules:**
 1. **server.js** - Express app initialization & routing
@@ -46,7 +46,7 @@ A fully functional, production-ready web application for train ticket booking wi
 **Running On:** `http://localhost:3001`
 
 ### 💾 Database (SQLite)
-**Location:** `/Users/harshul/IRCTC_Clone/backend/db/irctc.db`
+**Location:** `/Users/harshul/Rail_Connect/backend/db/irctc.db`
 
 **Tables:**
 1. **trains** - Train information with available seats
@@ -161,7 +161,7 @@ Frontend updates bookings list & train availability
 ## 📚 Project Files Structure
 
 ```
-IRCTC_Clone/
+Rail_Connect/
 │
 ├── 📄 README.md                    ← Main documentation
 ├── 📄 QUICKSTART.md                ← Quick start guide  
@@ -261,11 +261,11 @@ When a booking is created:
 ### Start the Application
 ```bash
 # Terminal 1: Backend
-cd /Users/harshul/IRCTC_Clone/backend
+cd /Users/harshul/Rail_Connect/backend
 npm start
 
 # Terminal 2: Frontend
-cd /Users/harshul/IRCTC_Clone
+cd /Users/harshul/Rail_Connect
 npm run dev
 ```
 
@@ -295,7 +295,7 @@ npm run dev
 
 The SQLite database file exists at:
 ```
-/Users/harshul/IRCTC_Clone/backend/db/irctc.db
+/Users/harshul/Rail_Connect/backend/db/irctc.db
 ```
 
 **Database contains:**
@@ -419,6 +419,6 @@ The application successfully demonstrates the ability to:
 
 ---
 
-**🚀 Your IRCTC Clone is ready to use!**
+**🚀 Your Rail Connect is ready to use!**
 
 Start both servers and visit http://localhost:5173 to begin booking trains!

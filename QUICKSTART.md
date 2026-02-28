@@ -1,10 +1,10 @@
-# IRCTC Clone - Quick Start Guide
+# Rail Connect - Quick Start Guide
 
 ## Starting the Application
 
 ### 1️⃣ Start Backend Server (Terminal 1)
 ```bash
-cd /Users/harshul/IRCTC_Clone/backend
+cd /Users/harshul/Rail_Connect/backend
 npm start
 ```
 
@@ -21,7 +21,7 @@ Database initialized
 
 ### 2️⃣ Start Frontend Server (Terminal 2)
 ```bash
-cd /Users/harshul/IRCTC_Clone
+cd /Users/harshul/Rail_Connect
 npm run dev
 ```
 
@@ -165,13 +165,13 @@ curl http://localhost:3001/api/health
 
 The database is stored at:
 ```
-/Users/harshul/IRCTC_Clone/backend/db/irctc.db
+/Users/harshul/Rail_Connect/backend/db/irctc.db
 ```
 
 To reset the database to initial state:
 ```bash
 # Delete the database file
-rm /Users/harshul/IRCTC_Clone/backend/db/irctc.db
+rm /Users/harshul/Rail_Connect/backend/db/irctc.db
 
 # Restart the backend server
 # A fresh database with sample trains will be created

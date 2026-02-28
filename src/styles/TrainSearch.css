@@ -1,85 +1,379 @@
+/* ===== Hero Section with Search ===== */
 .train-search {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3a7ab8 100%);
+  background-image: 
+    linear-gradient(to bottom, rgba(30, 58, 95, 0.85), rgba(45, 90, 135, 0.85)),
+    url('https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  padding: 4rem 2rem 5rem;
+  margin: 0;
+  position: relative;
 }
 
 .train-search h2 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.8rem;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
 }
 
+.train-search h2::before {
+  content: 'Experience the scenic route';
+  display: block;
+}
+
+.train-search h2::after {
+  content: 'Book train tickets to top destinations across the country with ease and comfort.';
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hide original h2 text */
+.train-search h2 {
+  font-size: 0;
+}
+
+.train-search h2::before {
+  font-size: 2.5rem;
+}
+
+/* ===== Search Form Card ===== */
 .search-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  display: flex;
   align-items: flex-end;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 2rem auto 0;
+  position: relative;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .form-group label {
-  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: #555;
-  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gray-500);
+  margin-bottom: 0.5rem;
 }
 
 .form-group select,
-.form-group input {
-  padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+.date-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 1rem;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  color: var(--gray-900);
+  transition: all 0.15s ease;
+  cursor: pointer;
   font-family: inherit;
 }
 
-.form-group select:focus,
-.form-group input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.form-group select:hover,
+.date-input:hover {
+  border-color: var(--gray-300);
 }
 
+.form-group select:focus,
+.date-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: var(--white);
+}
+
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 2.5rem;
+}
+
+.form-group input::placeholder {
+  color: var(--gray-400);
+}
+
+/* ===== Date Picker ===== */
+.date-picker-wrapper {
+  position: relative;
+}
+
+.date-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input {
+  cursor: pointer;
+  padding-right: 2.75rem !important;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--gray-400);
+  pointer-events: none;
+}
+
+/* ===== Calendar Popup ===== */
+.calendar-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  z-index: 50;
+  padding: 1rem;
+  min-width: 320px;
+}
+
+/* ===== React Calendar Styles ===== */
+.react-calendar {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+}
+
+.react-calendar__wrapper {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.react-calendar__month-view__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+.react-calendar__month-view__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.react-calendar__month-view__days__day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  height: auto;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.react-calendar__month-view__days__day:hover:not(:disabled) {
+  background: var(--gray-100);
+  border-color: var(--gray-200);
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: var(--gray-700);
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: var(--gray-300);
+}
+
+.react-calendar__month-view__days__day--active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.react-calendar__month-view__days__day.react-calendar__tile--now {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.react-calendar__year-view__months,
+.react-calendar__decade-view__years,
+.react-calendar__century-view__decades {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.react-calendar__year-view__months__month,
+.react-calendar__decade-view__years__year,
+.react-calendar__century-view__decades__decade {
+  padding: 0.75rem 0.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.react-calendar__year-view__months__month:hover,
+.react-calendar__decade-view__years__year:hover,
+.react-calendar__century-view__decades__decade:hover {
+  background: var(--gray-100);
+}
+
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.react-calendar__navigation button {
+  background: transparent;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  color: var(--gray-600);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.react-calendar__navigation button:hover {
+  background: var(--gray-100);
+  border-color: var(--gray-300);
+}
+
+.react-calendar__navigation__label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  flex: 1;
+  text-align: center;
+}
+
+/* ===== Search Button ===== */
 .search-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 48px;
+  padding: 0 2rem;
+  background: var(--primary);
   color: white;
   border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.4);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.search-btn::before {
+  content: '🔍';
+  font-size: 1rem;
 }
 
 .search-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6);
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
 .search-btn:active {
   transform: translateY(0);
 }
 
-@media (max-width: 768px) {
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
   .train-search {
-    padding: 1.5rem;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .train-search h2::before {
+    font-size: 2rem;
   }
 
   .search-form {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .form-group {
+    width: 100%;
   }
 
   .search-btn {
     width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .train-search {
+    padding: 2.5rem 1rem 3rem;
+  }
+
+  .train-search h2::before {
+    font-size: 1.5rem;
+  }
+
+  .train-search h2::after {
+    font-size: 0.875rem;
+  }
+
+  .form-group select,
+  .form-group input {
+    height: 44px;
+    font-size: 0.875rem;
+  }
+
+  .search-btn {
+    height: 44px;
   }
 }

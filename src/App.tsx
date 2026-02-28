@@ -213,7 +213,7 @@ function App() {
       )}
 
       <header className="header">
-        <h1>🚂 IRCTC Clone - Train Booking System</h1>
+        <h1>🚂 Rail Connect - Train Booking System</h1>
         <nav className="nav">
           <button 
             className={`nav-btn ${currentPage === 'search' ? 'active' : ''}`}
@@ -284,7 +284,7 @@ function App() {
       </main>
 
       <footer className="footer">
-        <p>&copy; 2024 IRCTC Clone - Powered by React + Express + SQLite</p>
+        <p>&copy; 2024 Rail Connect - Powered by React + Express + SQLite</p>
       </footer>
     </div>
   )

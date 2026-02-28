@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
 import '../styles/TrainSearch.css'
 
 interface TrainSearchProps {
@@ -8,7 +10,9 @@ interface TrainSearchProps {
 export default function TrainSearch({ onSearch }: TrainSearchProps) {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState<Date | null>(null)
+  const [showCalendar, setShowCalendar] = useState(false)
+  const calendarRef = useRef<HTMLDivElement>(null)
 
   const stations = [
     'Delhi',
@@ -22,14 +26,48 @@ export default function TrainSearch({ onSearch }: TrainSearchProps) {
     'Jaipur',
   ]
 
+  // Close calendar when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setShowCalendar(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleDateChange = (value: unknown) => {
+    const dateValue = value as Date | null
+    if (dateValue instanceof Date) {
+      setDate(dateValue)
+      setShowCalendar(false)
+    }
+  }
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (!from || !to) {
       alert('Please select both departure and destination stations')
       return
     }
-    // date may be empty; that's okay we'll filter if provided
-    onSearch({ from, to, date })
+    const dateString = date ? date.toISOString().split('T')[0] : ''
+    onSearch({ from, to, date: dateString })
+  }
+
+  const minDate = new Date()
+  const maxDate = new Date()
+  maxDate.setDate(maxDate.getDate() + 90)
+
+  const formatDate = (d: Date | null) => {
+    if (!d) return ''
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    }
+    return d.toLocaleDateString('en-US', options)
   }
 
   return (
@@ -66,15 +104,39 @@ export default function TrainSearch({ onSearch }: TrainSearchProps) {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="form-group date-picker-wrapper" ref={calendarRef}>
           <label htmlFor="date">Journey Date</label>
-          <input
-            id="date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            min={new Date().toISOString().split('T')[0]}
-          />
+          <div className="date-input-container">
+            <input
+              id="date"
+              type="text"
+              value={formatDate(date)}
+              onClick={() => setShowCalendar(!showCalendar)}
+              readOnly
+              placeholder="Select date"
+              className="date-input"
+            />
+            <svg className="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          {showCalendar && (
+            <div className="calendar-popup">
+              <Calendar
+                onChange={handleDateChange}
+                value={date}
+                minDate={minDate}
+                maxDate={maxDate}
+                view="month"
+                navigationLabel={({ date }) => 
+                  date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                }
+              />
+            </div>
+          )}
         </div>
 
         <button type="submit" className="search-btn">Search Trains</button>

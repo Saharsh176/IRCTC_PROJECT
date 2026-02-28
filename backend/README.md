@@ -1,7 +1,7 @@
-# IRCTC Clone - Backend API Documentation
+# Rail Connect - Backend API Documentation
 
 ## Overview
-Express.js backend with SQLite database for the IRCTC Clone train booking application. Handles all CRUD operations for trains and bookings with real-time seat availability management.
+Express.js backend with SQLite database for the Rail Connect train booking application. Handles all CRUD operations for trains and bookings with real-time seat availability management.
 
 ## Architecture
 
@@ -28,7 +28,7 @@ Backend Structure:
 ## Installation
 
 ```bash
-cd /Users/harshul/IRCTC_Clone/backend
+cd /Users/harshul/Rail_Connect/backend
 npm install
 ```
 
@@ -327,7 +327,7 @@ Common HTTP Status Codes:
 
 SQLite database is stored at:
 ```
-/Users/harshul/IRCTC_Clone/backend/db/irctc.db
+/Users/harshul/Rail_Connect/backend/db/irctc.db
 ```
 
 The database file is created automatically on first run.
@@ -377,7 +377,7 @@ lsof -i :3001 | grep -v COMMAND | awk '{print $2}' | xargs kill -9
 ### Database Issues
 Delete the database file and restart the server to recreate it:
 ```bash
-rm /Users/harshul/IRCTC_Clone/backend/db/irctc.db
+rm /Users/harshul/Rail_Connect/backend/db/irctc.db
 npm start
 ```
 

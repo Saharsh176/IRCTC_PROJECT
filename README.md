@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# IRCTC Clone - Train Booking Web Application
+# Rail Connect - Train Booking Web Application
 
 A full-stack, modern web application for searching and booking train tickets. This project demonstrates complete CRUD operations with a responsive React frontend, Express.js backend, and SQLite database.
 
@@ -25,7 +25,7 @@ A full-stack, modern web application for searching and booking train tickets. Th
 ## 📊 Project Structure
 
 ```
-IRCTC_Clone/
+Rail_Connect/
 ├── frontend/                 # React + Vite application
 │   ├── src/
 │   │   ├── components/      # React components
@@ -68,7 +68,7 @@ IRCTC_Clone/
 
 1. **Clone/Open the project**
    ```bash
-   cd /Users/harshul/IRCTC_Clone
+   cd /Users/harshul/Rail_Connect
    ```
 
 2. **Install Frontend Dependencies**
