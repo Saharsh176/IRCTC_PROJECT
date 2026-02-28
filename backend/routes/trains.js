@@ -14,22 +14,17 @@ router.get('/', (req, res) => {
     query += ' AND from_station LIKE ?';
     params.push(`%${from}%`);
   }
-
   if (to) {
     query += ' AND to_station LIKE ?';
     params.push(`%${to}%`);
   }
-
   if (date) {
-    // expect date in YYYY-MM-DD format
     query += ' AND journey_date = ?';
     params.push(date);
   }
 
-  db.all(query, params, (err, rows) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const rows = db.prepare(query).all(params);
     res.json({
       success: true,
       data: rows.map(train => ({
@@ -47,17 +42,17 @@ router.get('/', (req, res) => {
         daysRunning: train.days_running
       }))
     });
-  });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // GET single train
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
-  db.get('SELECT * FROM trains WHERE id = ?', [id], (err, row) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const row = db.prepare('SELECT * FROM trains WHERE id = ?').get(id);
     if (!row) {
       return res.status(404).json({ success: false, error: 'Train not found' });
     }
@@ -79,28 +74,22 @@ router.get('/:id', (req, res) => {
         daysRunning: row.days_running
       }
     });
-  });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // CREATE a new train (admin only)
 router.post('/', (req, res) => {
   const { name, from, to, departure, arrival, duration, seats, price, daysRunning } = req.body;
 
-  // Validation - remove date requirement since it's based on days_running
   if (!name || !from || !to || !departure || !arrival || !duration || seats === undefined || !price || !daysRunning) {
-    return res.status(400).json({ 
-      success: false, 
-      error: 'Missing required fields (name, from, to, departure, arrival, duration, seats, price, daysRunning)' 
-    });
+    return res.status(400).json({ success: false, error: 'Missing required fields' });
   }
 
-  // Validate daysRunning format
   const daysStr = Array.isArray(daysRunning) ? daysRunning.join(',') : daysRunning;
   if (typeof daysStr !== 'string' || daysStr.trim() === '') {
-    return res.status(400).json({ 
-      success: false, 
-      error: 'Days running must be provided' 
-    });
+    return res.status(400).json({ success: false, error: 'Days running must be provided' });
   }
 
   const id = Date.now().toString();
@@ -110,77 +99,39 @@ router.post('/', (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  db.run(
-    query,
-    [id, name, from, to, departure, arrival, duration, today, seats, seats, parseFloat(price), daysStr],
-    (err) => {
-      if (err) {
-        return res.status(500).json({ success: false, error: err.message });
-      }
-
-      res.status(201).json({
-        success: true,
-        message: 'Train created successfully',
-        data: { id }
-      });
-    }
-  );
+  try {
+    db.prepare(query).run(id, name, from, to, departure, arrival, duration, today, seats, seats, parseFloat(price), daysStr);
+    res.status(201).json({ success: true, message: 'Train created successfully', data: { id } });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // UPDATE train (admin only)
 router.put('/:id', (req, res) => {
   const { id } = req.params;
-  const { name, from, to, departure, arrival, duration, date, seats, price, daysRunning } = req.body;
+  const { name, from, to, departure, arrival, duration, seats, price, daysRunning } = req.body;
 
-  // Check if train exists
-  db.get('SELECT * FROM trains WHERE id = ?', [id], (err, train) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const train = db.prepare('SELECT * FROM trains WHERE id = ?').get(id);
     if (!train) {
       return res.status(404).json({ success: false, error: 'Train not found' });
     }
 
-    // Update query
     const updates = [];
     const params = [];
 
-    if (name !== undefined) {
-      updates.push('name = ?');
-      params.push(name);
-    }
-    if (from !== undefined) {
-      updates.push('from_station = ?');
-      params.push(from);
-    }
-    if (to !== undefined) {
-      updates.push('to_station = ?');
-      params.push(to);
-    }
-    if (departure !== undefined) {
-      updates.push('departure_time = ?');
-      params.push(departure);
-    }
-    if (arrival !== undefined) {
-      updates.push('arrival_time = ?');
-      params.push(arrival);
-    }
-    if (duration !== undefined) {
-      updates.push('duration = ?');
-      params.push(duration);
-    }
-    if (seats !== undefined) {
-      updates.push('available_seats = ?');
-      params.push(seats);
-    }
-    if (price !== undefined) {
-      updates.push('price_per_seat = ?');
-      params.push(parseFloat(price));
-    }
+    if (name !== undefined) { updates.push('name = ?'); params.push(name); }
+    if (from !== undefined) { updates.push('from_station = ?'); params.push(from); }
+    if (to !== undefined) { updates.push('to_station = ?'); params.push(to); }
+    if (departure !== undefined) { updates.push('departure_time = ?'); params.push(departure); }
+    if (arrival !== undefined) { updates.push('arrival_time = ?'); params.push(arrival); }
+    if (duration !== undefined) { updates.push('duration = ?'); params.push(duration); }
+    if (seats !== undefined) { updates.push('available_seats = ?'); params.push(seats); }
+    if (price !== undefined) { updates.push('price_per_seat = ?'); params.push(parseFloat(price)); }
     if (daysRunning !== undefined) {
       const daysStr = Array.isArray(daysRunning) ? daysRunning.join(',') : daysRunning;
-      updates.push('days_running = ?');
-      params.push(daysStr);
+      updates.push('days_running = ?'); params.push(daysStr);
     }
 
     if (updates.length === 0) {
@@ -190,45 +141,28 @@ router.put('/:id', (req, res) => {
     params.push(id);
     const query = `UPDATE trains SET ${updates.join(', ')} WHERE id = ?`;
 
-    db.run(query, params, (err) => {
-      if (err) {
-        console.error('Database error during update:', err.message);
-        return res.status(500).json({ success: false, error: 'Database error: ' + err.message });
-      }
-
-      res.json({
-        success: true,
-        message: 'Train updated successfully'
-      });
-    });
-  });
+    db.prepare(query).run(params);
+    res.json({ success: true, message: 'Train updated successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Database error: ' + err.message });
+  }
 });
 
 // DELETE train (admin only)
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
 
-  // Check if train exists
-  db.get('SELECT * FROM trains WHERE id = ?', [id], (err, train) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const train = db.prepare('SELECT * FROM trains WHERE id = ?').get(id);
     if (!train) {
       return res.status(404).json({ success: false, error: 'Train not found' });
     }
 
-    // Delete train
-    db.run('DELETE FROM trains WHERE id = ?', [id], (err) => {
-      if (err) {
-        return res.status(500).json({ success: false, error: err.message });
-      }
-
-      res.json({
-        success: true,
-        message: 'Train deleted successfully'
-      });
-    });
-  });
+    db.prepare('DELETE FROM trains WHERE id = ?').run(id);
+    res.json({ success: true, message: 'Train deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 export default router;

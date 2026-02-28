@@ -239,7 +239,7 @@
 .passenger-selector input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 /* ===== Price Summary ===== */
@@ -264,7 +264,7 @@
   height: 44px;
   padding: 0 2rem;
   background: var(--primary);
-  color: white;
+  color: var(--btn-text);
   border: none;
   border-radius: var(--radius);
   font-size: 0.9375rem;
@@ -276,7 +276,7 @@
 .book-btn:hover:not(:disabled) {
   background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 12px var(--primary-light);
 }
 
 .book-btn:disabled {

@@ -5,6 +5,7 @@ import BookingList from './components/BookingList'
 import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
 import { getTrains, getBookings, createBooking, deleteBooking, createTrain, updateTrain, deleteTrain } from './api/client'
+import { useTheme } from './context/ThemeContext' 
 import './styles/App.css'
 
 interface Train {
@@ -44,6 +45,9 @@ function App() {
   const [adminAuthenticated, setAdminAuthenticated] = useState(false)
   const [showAdminLogin, setShowAdminLogin] = useState(false)
   const [selectedSearchDate, setSelectedSearchDate] = useState<string>('')
+
+  // <-- Initialized Theme Hook
+  const { theme, setTheme } = useTheme()
 
   // Fetch trains and bookings on mount
   useEffect(() => {
@@ -210,7 +214,7 @@ function App() {
       )}
 
       <header className="header">
-        <h1>🚂 Rail Connect - Train Booking System</h1>
+        <h1>Rail Connect - Train Booking System</h1>
         <nav className="nav">
           <button 
             className={`nav-btn ${currentPage === 'search' ? 'active' : ''}`}
@@ -229,22 +233,32 @@ function App() {
             onClick={fetchInitialData}
             title="Refresh data from server"
           >
-            🔄 Refresh
+            Refresh
           </button>
+          
+          {/* <-- Added Theme Toggle Button --> */}
+          <button 
+            className="nav-btn theme-toggle-btn"
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            title="Toggle Theme"
+          >
+            {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+          </button>
+
           {!adminAuthenticated ? (
             <button 
               className="nav-btn admin-btn"
               onClick={() => setShowAdminLogin(true)}
               title="Admin Panel"
             >
-              🔐 Admin
+              Admin
             </button>
           ) : (
             <button 
               className={`nav-btn ${currentPage === 'admin' ? 'active' : ''}`}
               onClick={() => setCurrentPage('admin')}
             >
-              ⚙️ Manage Trains
+              Manage Trains
             </button>
           )}
         </nav>
@@ -265,6 +279,7 @@ function App() {
         ) : currentPage === 'search' ? (
           <>
             <TrainSearch onSearch={handleSearch} />
+            {/* The TicketCounter component will be used inside TrainList */}
             <TrainList trains={filteredTrains} onBook={handleBooking} selectedDate={selectedSearchDate} />
           </>
         ) : currentPage === 'bookings' ? (

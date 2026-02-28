@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import TicketCounter from './TicketCounter'
 import '../styles/TrainList.css'
 
 interface Train {
@@ -101,15 +102,16 @@ export default function TrainList({ trains, onBook, selectedDate }: TrainListPro
             <div className="train-details">
               <div className="booking-section">
                 <div className="passenger-selector">
-                  <label htmlFor={`passengers-${train.id}`}>Number of Passengers:</label>
-                  <input
-                    id={`passengers-${train.id}`}
-                    type="number"
-                    min="1"
-                    max={train.seats}
+                  <label>Number of Passengers:</label>
+                  
+                  {/* Modern Ticket Counter replaces standard input */}
+                  <TicketCounter 
                     value={passengers[train.id] || 1}
-                    onChange={(e) => handlePassengerChange(train.id, parseInt(e.target.value))}
+                    onChange={(val) => handlePassengerChange(train.id, val)}
+                    min={1}
+                    max={train.seats}
                   />
+
                 </div>
                 <div className="price-summary">
                   <p>Total Price: <strong>₹{train.price * (passengers[train.id] || 1)}</strong></p>
