@@ -3,6 +3,18 @@ import db from '../db/database.js';
 
 const router = express.Router();
 
+// Helper function to calculate available seats for a specific date
+const getAvailableSeatsForDate = (trainId, date) => {
+  const train = db.prepare('SELECT total_seats FROM trains WHERE id = ?').get(trainId);
+  if (!train) return 0;
+
+  const bookedResult = db.prepare(
+    'SELECT COALESCE(SUM(num_passengers), 0) as booked FROM bookings WHERE train_id = ? AND travel_date = ?'
+  ).get(trainId, date);
+
+  return train.total_seats - (bookedResult?.booked || 0);
+};
+
 // GET all bookings
 router.get('/', (req, res) => {
   try {
@@ -73,28 +85,30 @@ router.post('/', (req, res) => {
       return res.status(404).json({ success: false, error: 'Train not found' });
     }
 
-    if (train.available_seats < passengers) {
-      return res.status(400).json({ success: false, error: `Only ${train.available_seats} seats available` });
+    // Calculate available seats for THIS SPECIFIC DATE only
+    const availableSeatsForDate = getAvailableSeatsForDate(trainId, travelDate);
+    if (availableSeatsForDate < passengers) {
+      return res.status(400).json({ success: false, error: `Only ${availableSeatsForDate} seats available on ${travelDate}` });
     }
 
     const bookingId = Date.now().toString();
     const totalPrice = train.price_per_seat * passengers;
     const bookingDate = new Date().toLocaleDateString();
-    const newAvailableSeats = train.available_seats - passengers;
 
     const insertBooking = db.prepare(
       `INSERT INTO bookings (id, train_id, train_name, from_station, to_station, num_passengers, total_price, booking_date, travel_date)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     );
-    const updateTrain = db.prepare('UPDATE trains SET available_seats = ? WHERE id = ?');
 
-    // Run atomically within a transaction
+    // Run atomically within a transaction (no need to update train table anymore)
     const performBooking = db.transaction(() => {
       insertBooking.run(bookingId, trainId, train.name, train.from_station, train.to_station, passengers, totalPrice, bookingDate, travelDate);
-      updateTrain.run(newAvailableSeats, trainId);
     });
 
     performBooking();
+
+    // Calculate remaining seats for this date
+    const remainingSeats = availableSeatsForDate - passengers;
 
     res.status(201).json({
       success: true,
@@ -108,7 +122,8 @@ router.post('/', (req, res) => {
         bookingDate,
         travelDate,
         from: train.from_station,
-        to: train.to_station
+        to: train.to_station,
+        remainingSeats
       }
     });
   } catch (err) {
@@ -126,23 +141,17 @@ router.delete('/:id', (req, res) => {
       return res.status(404).json({ success: false, error: 'Booking not found' });
     }
 
-    const train = db.prepare('SELECT * FROM trains WHERE id = ?').get(booking.train_id);
-    if (!train) {
-      return res.status(500).json({ success: false, error: 'Associated train data missing' });
-    }
-
-    const restoredSeats = train.available_seats + booking.num_passengers;
-
     const deleteBooking = db.prepare('DELETE FROM bookings WHERE id = ?');
-    const updateTrain = db.prepare('UPDATE trains SET available_seats = ? WHERE id = ?');
 
-    // Run atomically within a transaction
+    // Run atomically within a transaction (no train table update needed)
     const cancelBooking = db.transaction(() => {
-      updateTrain.run(restoredSeats, booking.train_id);
       deleteBooking.run(id);
     });
 
     cancelBooking();
+
+    // Calculate remaining seats after cancellation
+    const restoredSeats = getAvailableSeatsForDate(booking.train_id, booking.travel_date);
 
     res.json({
       success: true,

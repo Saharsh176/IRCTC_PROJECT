@@ -3,6 +3,18 @@ import db from '../db/database.js';
 
 const router = express.Router();
 
+// Helper function to calculate available seats for a specific date
+const getAvailableSeatsForDate = (trainId, date) => {
+  const train = db.prepare('SELECT total_seats FROM trains WHERE id = ?').get(trainId);
+  if (!train) return 0;
+
+  const bookedResult = db.prepare(
+    'SELECT COALESCE(SUM(num_passengers), 0) as booked FROM bookings WHERE train_id = ? AND travel_date = ?'
+  ).get(trainId, date);
+
+  return train.total_seats - (bookedResult?.booked || 0);
+};
+
 // GET all trains
 router.get('/', (req, res) => {
   const { from, to, date } = req.query;
@@ -18,29 +30,29 @@ router.get('/', (req, res) => {
     query += ' AND to_station LIKE ?';
     params.push(`%${to}%`);
   }
-  if (date) {
-    query += ' AND journey_date = ?';
-    params.push(date);
-  }
 
   try {
     const rows = db.prepare(query).all(params);
     res.json({
       success: true,
-      data: rows.map(train => ({
-        id: train.id,
-        name: train.name,
-        from: train.from_station,
-        to: train.to_station,
-        departure: train.departure_time,
-        arrival: train.arrival_time,
-        duration: train.duration,
-        date: train.journey_date,
-        seats: train.available_seats,
-        totalSeats: train.total_seats,
-        price: train.price_per_seat,
-        daysRunning: train.days_running
-      }))
+      data: rows.map(train => {
+        // Calculate available seats for the requested date
+        const availableSeats = date ? getAvailableSeatsForDate(train.id, date) : train.total_seats;
+        return {
+          id: train.id,
+          name: train.name,
+          from: train.from_station,
+          to: train.to_station,
+          departure: train.departure_time,
+          arrival: train.arrival_time,
+          duration: train.duration,
+          date: date || train.journey_date,
+          seats: availableSeats,
+          totalSeats: train.total_seats,
+          price: train.price_per_seat,
+          daysRunning: train.days_running
+        };
+      })
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -57,6 +69,7 @@ router.get('/:id', (req, res) => {
       return res.status(404).json({ success: false, error: 'Train not found' });
     }
 
+    // For single train, return current total_seats as available (not date-specific from this endpoint)
     res.json({
       success: true,
       data: {
@@ -68,7 +81,7 @@ router.get('/:id', (req, res) => {
         arrival: row.arrival_time,
         duration: row.duration,
         date: row.journey_date,
-        seats: row.available_seats,
+        seats: row.total_seats,
         totalSeats: row.total_seats,
         price: row.price_per_seat,
         daysRunning: row.days_running

@@ -129,10 +129,8 @@ function App() {
       }
 
       // ensure travelDate not in past (should normally be enforced by search)
-      const today = new Date()
-      const [y, m, d] = travelDate.split('-').map(Number)
-      const travelDateObj = new Date(y, m - 1, d)
-      if (travelDateObj < today) {
+      const todayString = new Date().toISOString().split('T')[0]
+      if (travelDate < todayString) {
         alert('Cannot book for a past date')
         return
       }
