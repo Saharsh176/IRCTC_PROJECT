@@ -18,7 +18,7 @@ interface Train {
   duration: string
   date: string
   seats: number
-  totalSeats?: number
+  totalSeats: number
   price: number
   daysRunning?: string
 }
@@ -83,10 +83,24 @@ function App() {
       // Filter by day of week if date is provided
       let filtered = allTrains
       if (filters.date) {
-        const dayOfWeekName = new Date(filters.date).toLocaleDateString('en-US', { weekday: 'short' })
-        filtered = allTrains.filter(train => {
+        // Parse date string directly (YYYY-MM-DD) to avoid timezone issues
+        const [year, month, day] = filters.date.split('-').map(Number)
+        const dateObj = new Date(year, month - 1, day)
+        const dayIndex = dateObj.getDay()
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        const dayOfWeekName = daysOfWeek[dayIndex]
+        
+        filtered = allTrains.filter((train: Train) => {
           if (!train.daysRunning) return true
           return train.daysRunning.includes(dayOfWeekName)
+        })
+        
+        // Calculate available seats for each train on this date based on bookings
+        filtered = filtered.map(train => {
+          const bookingsForThisDate = bookings.filter(b => b.trainId === train.id && b.travelDate === filters.date)
+          const bookedSeats = bookingsForThisDate.reduce((sum, b) => sum + b.passengers, 0)
+          const availableSeats = train.totalSeats - bookedSeats
+          return { ...train, seats: availableSeats }
         })
       }
       
@@ -104,14 +118,21 @@ function App() {
       const train = trains.find(t => t.id === trainId)
       if (!train) return
 
-      if (train.seats < passengers) {
+      // Calculate available seats for this specific date
+      const bookingsForThisDate = bookings.filter(b => b.trainId === trainId && b.travelDate === travelDate)
+      const bookedSeats = bookingsForThisDate.reduce((sum, b) => sum + b.passengers, 0)
+      const availableSeats = train.totalSeats - bookedSeats
+
+      if (availableSeats < passengers) {
         alert('Not enough seats available!')
         return
       }
 
       // ensure travelDate not in past (should normally be enforced by search)
-      const todayString = new Date().toISOString().split('T')[0]
-      if (travelDate < todayString) {
+      const today = new Date()
+      const [y, m, d] = travelDate.split('-').map(Number)
+      const travelDateObj = new Date(y, m - 1, d)
+      if (travelDateObj < today) {
         alert('Cannot book for a past date')
         return
       }
@@ -121,10 +142,17 @@ function App() {
       // Add booking to list
       setBookings([...bookings, booking])
       
-      // Update train seats
-      const updatedTrain = { ...train, seats: train.seats - passengers }
-      setTrains(trains.map(t => t.id === trainId ? updatedTrain : t))
-      setFilteredTrains(filteredTrains.map(t => t.id === trainId ? updatedTrain : t))
+      // Don't update train seats globally - calculate based on bookings per date
+      // Recalculate filtered trains with updated seat counts
+      const updatedFilteredTrains = filteredTrains.map(t => {
+        if (t.id === trainId) {
+          const bookingsForTrain = [...bookings, booking].filter(b => b.trainId === trainId && b.travelDate === travelDate)
+          const booked = bookingsForTrain.reduce((sum, b) => sum + b.passengers, 0)
+          return { ...t, seats: t.totalSeats - booked }
+        }
+        return t
+      })
+      setFilteredTrains(updatedFilteredTrains)
 
       alert(`Booking confirmed! Booking ID: ${booking.id}`)
     } catch (err: any) {
@@ -141,15 +169,19 @@ function App() {
       await deleteBooking(bookingId)
 
       // Remove booking from list
-      setBookings(bookings.filter(b => b.id !== bookingId))
+      const updatedBookings = bookings.filter(b => b.id !== bookingId)
+      setBookings(updatedBookings)
 
-      // Restore train seats
-      const updatedTrain = trains.find(t => t.id === booking.trainId)
-      if (updatedTrain) {
-        const restoredTrain = { ...updatedTrain, seats: updatedTrain.seats + booking.passengers }
-        setTrains(trains.map(t => t.id === booking.trainId ? restoredTrain : t))
-        setFilteredTrains(filteredTrains.map(t => t.id === booking.trainId ? restoredTrain : t))
-      }
+      // Recalculate seats for this train on this date
+      const updatedFilteredTrains = filteredTrains.map(t => {
+        if (t.id === booking.trainId) {
+          const bookingsForTrain = updatedBookings.filter(b => b.trainId === booking.trainId && b.travelDate === booking.travelDate)
+          const booked = bookingsForTrain.reduce((sum, b) => sum + b.passengers, 0)
+          return { ...t, seats: t.totalSeats - booked }
+        }
+        return t
+      })
+      setFilteredTrains(updatedFilteredTrains)
 
       alert('Booking cancelled successfully!')
     } catch (err: any) {

@@ -42,8 +42,13 @@ export default function TrainList({ trains, onBook, selectedDate }: TrainListPro
       return
     }
 
-    const travelDate = train ? train.date : ''
-    onBook(trainId, count, travelDate)
+    // Use selectedDate from props instead of train.date
+    if (!selectedDate) {
+      alert('Please select a travel date')
+      return
+    }
+
+    onBook(trainId, count, selectedDate)
     setPassengers(prev => ({
       ...prev,
       [trainId]: 1
@@ -91,7 +96,7 @@ export default function TrainList({ trains, onBook, selectedDate }: TrainListPro
             </div>
             <div className="train-price">
               <p className="price">₹{train.price}</p>
-              <p className="seats-available">{train.seats} seats</p>
+              <p className="seats-available">{train.seats > 0 ? '✓ Available' : 'Sold Out'}</p>
             </div>
             <button className="expand-btn">
               {expandedId === train.id ? '▲' : '▼'}
@@ -114,6 +119,7 @@ export default function TrainList({ trains, onBook, selectedDate }: TrainListPro
 
                 </div>
                 <div className="price-summary">
+                  {selectedDate && <p className="booking-date">📅 Booking for: <strong>{selectedDate}</strong></p>}
                   <p>Total Price: <strong>₹{train.price * (passengers[train.id] || 1)}</strong></p>
                 </div>
                 <button 

@@ -38,21 +38,24 @@ export default function TrainSearch({ onSearch }: TrainSearchProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleDateChange = (value: unknown) => {
-    const dateValue = value as Date | null
-    if (dateValue instanceof Date) {
-      setDate(dateValue)
+  const handleDateChange = (value: Date) => {
+    if (value instanceof Date) {
+      setDate(value)
       setShowCalendar(false)
     }
   }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!from || !to) {
-      alert('Please select both departure and destination stations')
+    if (!from || !to || !date) {
+      alert('Please select departure station, destination station, and date')
       return
     }
-    const dateString = date ? date.toISOString().split('T')[0] : ''
+    // Format date as YYYY-MM-DD using local date values (not UTC conversion)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const dateString = `${year}-${month}-${day}`
     onSearch({ from, to, date: dateString })
   }
 
@@ -106,12 +109,11 @@ export default function TrainSearch({ onSearch }: TrainSearchProps) {
 
         <div className="form-group date-picker-wrapper" ref={calendarRef}>
           <label htmlFor="date">Journey Date</label>
-          <div className="date-input-container">
+          <div className="date-input-container" onClick={() => setShowCalendar(!showCalendar)}>
             <input
               id="date"
               type="text"
               value={formatDate(date)}
-              onClick={() => setShowCalendar(!showCalendar)}
               readOnly
               placeholder="Select date"
               className="date-input"
@@ -131,9 +133,17 @@ export default function TrainSearch({ onSearch }: TrainSearchProps) {
                 minDate={minDate}
                 maxDate={maxDate}
                 view="month"
-                navigationLabel={({ date }) => 
-                  date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                calendarType="gregory"
+                navigationLabel={({ date: navDate }) => 
+                  navDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
                 }
+                tileDisabled={({ date: tileDate }) => {
+                  // Disable past dates - compare dates properly
+                  const today = new Date()
+                  today.setHours(0, 0, 0, 0)
+                  return tileDate < today
+                }}
+                firstDayOfWeek={0}
               />
             </div>
           )}
