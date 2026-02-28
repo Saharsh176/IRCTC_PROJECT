@@ -5,35 +5,32 @@ const router = express.Router();
 
 // GET all bookings
 router.get('/', (req, res) => {
-  db.all('SELECT * FROM bookings ORDER BY created_at DESC', (err, rows) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
-
+  try {
+    const rows = db.prepare('SELECT * FROM bookings ORDER BY created_at DESC').all();
     const bookings = rows.map(booking => ({
       id: booking.id,
       trainId: booking.train_id,
       trainName: booking.train_name,
       passengers: booking.num_passengers,
       totalPrice: booking.total_price,
-      bookingDate: booking.booking_date, // creation date
-      travelDate: booking.travel_date,    // journey date
+      bookingDate: booking.booking_date,
+      travelDate: booking.travel_date,
       from: booking.from_station,
       to: booking.to_station
     }));
 
     res.json({ success: true, data: bookings });
-  });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // GET single booking
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
-  db.get('SELECT * FROM bookings WHERE id = ?', [id], (err, row) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const row = db.prepare('SELECT * FROM bookings WHERE id = ?').get(id);
     if (!row) {
       return res.status(404).json({ success: false, error: 'Booking not found' });
     }
@@ -47,154 +44,114 @@ router.get('/:id', (req, res) => {
         passengers: row.num_passengers,
         totalPrice: row.total_price,
         bookingDate: row.booking_date,
+        travelDate: row.travel_date,
         from: row.from_station,
         to: row.to_station
       }
     });
-  });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // CREATE a new booking
 router.post('/', (req, res) => {
   const { trainId, passengers, travelDate } = req.body;
 
-  // Validation
   if (!trainId || !passengers || passengers < 1 || !travelDate) {
-    return res.status(400).json({
-      success: false,
-      error: 'Invalid train ID, number of passengers, or journey date'
-    });
+    return res.status(400).json({ success: false, error: 'Invalid train ID, passengers, or date' });
   }
 
-  // ensure travelDate is not in the past
   const todayString = new Date().toISOString().split('T')[0];
   if (travelDate < todayString) {
-    return res.status(400).json({
-      success: false,
-      error: 'Journey date must be today or in the future'
-    });
+    return res.status(400).json({ success: false, error: 'Journey date must be today or future' });
   }
 
-  // Get train details
-  db.get('SELECT * FROM trains WHERE id = ?', [trainId], (err, train) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const train = db.prepare('SELECT * FROM trains WHERE id = ?').get(trainId);
     if (!train) {
       return res.status(404).json({ success: false, error: 'Train not found' });
     }
 
-    // Check if enough seats available
     if (train.available_seats < passengers) {
-      return res.status(400).json({
-        success: false,
-        error: `Only ${train.available_seats} seats available`
-      });
+      return res.status(400).json({ success: false, error: `Only ${train.available_seats} seats available` });
     }
 
-    // Create booking
     const bookingId = Date.now().toString();
     const totalPrice = train.price_per_seat * passengers;
     const bookingDate = new Date().toLocaleDateString();
+    const newAvailableSeats = train.available_seats - passengers;
 
-    db.run(
+    const insertBooking = db.prepare(
       `INSERT INTO bookings (id, train_id, train_name, from_station, to_station, num_passengers, total_price, booking_date, travel_date)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        bookingId,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    );
+    const updateTrain = db.prepare('UPDATE trains SET available_seats = ? WHERE id = ?');
+
+    // Run atomically within a transaction
+    const performBooking = db.transaction(() => {
+      insertBooking.run(bookingId, trainId, train.name, train.from_station, train.to_station, passengers, totalPrice, bookingDate, travelDate);
+      updateTrain.run(newAvailableSeats, trainId);
+    });
+
+    performBooking();
+
+    res.status(201).json({
+      success: true,
+      message: 'Booking created successfully',
+      data: {
+        id: bookingId,
         trainId,
-        train.name,
-        train.from_station,
-        train.to_station,
+        trainName: train.name,
         passengers,
         totalPrice,
         bookingDate,
-        travelDate
-      ],
-      (err) => {
-        if (err) {
-          return res.status(500).json({ success: false, error: err.message });
-        }
-
-        // Update available seats in train
-        const newAvailableSeats = train.available_seats - passengers;
-        db.run(
-          'UPDATE trains SET available_seats = ? WHERE id = ?',
-          [newAvailableSeats, trainId],
-          (err) => {
-            if (err) {
-              return res.status(500).json({ success: false, error: err.message });
-            }
-
-            res.status(201).json({
-              success: true,
-              message: 'Booking created successfully',
-              data: {
-                id: bookingId,
-                trainId,
-                trainName: train.name,
-                passengers,
-                totalPrice,
-                bookingDate,
-                travelDate,
-                from: train.from_station,
-                to: train.to_station
-              }
-            });
-          }
-        );
+        travelDate,
+        from: train.from_station,
+        to: train.to_station
       }
-    );
-  });
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // DELETE a booking (cancel booking)
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
 
-  // Get booking details
-  db.get('SELECT * FROM bookings WHERE id = ?', [id], (err, booking) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    const booking = db.prepare('SELECT * FROM bookings WHERE id = ?').get(id);
     if (!booking) {
       return res.status(404).json({ success: false, error: 'Booking not found' });
     }
 
-    // Get train details to update seats
-    db.get('SELECT * FROM trains WHERE id = ?', [booking.train_id], (err, train) => {
-      if (err) {
-        return res.status(500).json({ success: false, error: err.message });
-      }
+    const train = db.prepare('SELECT * FROM trains WHERE id = ?').get(booking.train_id);
+    if (!train) {
+      return res.status(500).json({ success: false, error: 'Associated train data missing' });
+    }
 
-      // Restore seats
-      const restoredSeats = train.available_seats + booking.num_passengers;
-      db.run(
-        'UPDATE trains SET available_seats = ? WHERE id = ?',
-        [restoredSeats, booking.train_id],
-        (err) => {
-          if (err) {
-            return res.status(500).json({ success: false, error: err.message });
-          }
+    const restoredSeats = train.available_seats + booking.num_passengers;
 
-          // Delete booking
-          db.run('DELETE FROM bookings WHERE id = ?', [id], (err) => {
-            if (err) {
-              return res.status(500).json({ success: false, error: err.message });
-            }
+    const deleteBooking = db.prepare('DELETE FROM bookings WHERE id = ?');
+    const updateTrain = db.prepare('UPDATE trains SET available_seats = ? WHERE id = ?');
 
-            res.json({
-              success: true,
-              message: 'Booking cancelled successfully',
-              data: {
-                restoredSeats
-              }
-            });
-          });
-        }
-      );
+    // Run atomically within a transaction
+    const cancelBooking = db.transaction(() => {
+      updateTrain.run(restoredSeats, booking.train_id);
+      deleteBooking.run(id);
     });
-  });
+
+    cancelBooking();
+
+    res.json({
+      success: true,
+      message: 'Booking cancelled successfully',
+      data: { restoredSeats }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 export default router;
