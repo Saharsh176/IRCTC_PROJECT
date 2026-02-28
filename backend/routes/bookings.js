@@ -67,11 +67,8 @@ router.post('/', (req, res) => {
   }
 
   // ensure travelDate is not in the past
-  const today = new Date();
-  const chosen = new Date(travelDate);
-  chosen.setHours(0,0,0,0);
-  today.setHours(0,0,0,0);
-  if (chosen < today) {
+  const todayString = new Date().toISOString().split('T')[0];
+  if (travelDate < todayString) {
     return res.status(400).json({
       success: false,
       error: 'Journey date must be today or in the future'

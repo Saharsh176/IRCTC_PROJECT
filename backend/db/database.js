@@ -91,13 +91,19 @@ export const initializeDatabase = () => {
       // Check if trains table is empty and populate with sample data
       db.get('SELECT COUNT(*) as count FROM trains', (err, row) => {
         if (row && row.count === 0) {
-          const today = new Date().toISOString().split('T')[0];
+          const today = new Date();
+          const getDateAfterDays = (days) => {
+            const date = new Date(today);
+            date.setDate(date.getDate() + days);
+            return date.toISOString().split('T')[0];
+          };
+
           const sampleTrains = [
-            { id: '1', name: 'Rajdhani Express', from_station: 'Delhi', to_station: 'Mumbai', departure_time: '22:00', arrival_time: '08:00', duration: '10h', journey_date: today, available_seats: 45, total_seats: 100, price_per_seat: 2500, days_running: 'Mon,Tue,Wed,Thu,Fri,Sat,Sun' },
-            { id: '2', name: 'Shatabdi Express', from_station: 'Delhi', to_station: 'Agra', departure_time: '06:30', arrival_time: '10:30', duration: '4h', journey_date: today, available_seats: 78, total_seats: 100, price_per_seat: 850, days_running: 'Mon,Tue,Wed,Thu,Fri' },
-            { id: '3', name: 'Intercity Express', from_station: 'Mumbai', to_station: 'Pune', departure_time: '14:00', arrival_time: '18:15', duration: '4h 15m', journey_date: today, available_seats: 120, total_seats: 150, price_per_seat: 450, days_running: 'Mon,Tue,Wed,Thu,Fri,Sat,Sun' },
-            { id: '4', name: 'Express Train', from_station: 'Delhi', to_station: 'Bangalore', departure_time: '20:30', arrival_time: '12:00', duration: '15h 30m', journey_date: today, available_seats: 92, total_seats: 150, price_per_seat: 3500, days_running: 'Tue,Wed,Thu,Fri,Sat' },
-            { id: '5', name: 'Fast Track Train', from_station: 'Bangalore', to_station: 'Chennai', departure_time: '11:00', arrival_time: '17:30', duration: '6h 30m', journey_date: today, available_seats: 85, total_seats: 120, price_per_seat: 1200, days_running: 'Mon,Tue,Wed,Thu,Fri,Sat' }
+            { id: '1', name: 'Rajdhani Express', from_station: 'Delhi', to_station: 'Mumbai', departure_time: '22:00', arrival_time: '08:00', duration: '10h', journey_date: getDateAfterDays(0), available_seats: 45, total_seats: 100, price_per_seat: 2500, days_running: 'Mon,Tue,Wed,Thu,Fri,Sat,Sun' },
+            { id: '2', name: 'Shatabdi Express', from_station: 'Delhi', to_station: 'Agra', departure_time: '06:30', arrival_time: '10:30', duration: '4h', journey_date: getDateAfterDays(1), available_seats: 78, total_seats: 100, price_per_seat: 850, days_running: 'Mon,Tue,Wed,Thu,Fri' },
+            { id: '3', name: 'Intercity Express', from_station: 'Mumbai', to_station: 'Pune', departure_time: '14:00', arrival_time: '18:15', duration: '4h 15m', journey_date: getDateAfterDays(2), available_seats: 120, total_seats: 150, price_per_seat: 450, days_running: 'Mon,Tue,Wed,Thu,Fri,Sat,Sun' },
+            { id: '4', name: 'Express Train', from_station: 'Delhi', to_station: 'Bangalore', departure_time: '20:30', arrival_time: '12:00', duration: '15h 30m', journey_date: getDateAfterDays(3), available_seats: 92, total_seats: 150, price_per_seat: 3500, days_running: 'Tue,Wed,Thu,Fri,Sat' },
+            { id: '5', name: 'Fast Track Train', from_station: 'Bangalore', to_station: 'Chennai', departure_time: '11:00', arrival_time: '17:30', duration: '6h 30m', journey_date: getDateAfterDays(5), available_seats: 85, total_seats: 120, price_per_seat: 1200, days_running: 'Mon,Tue,Wed,Thu,Fri,Sat' }
           ];
 
           const stmt = db.prepare(`

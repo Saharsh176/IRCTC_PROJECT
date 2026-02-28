@@ -26,6 +26,32 @@ interface AdminDashboardProps {
 
 const DAYS_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
+// Utility function to calculate duration from departure and arrival times
+const calculateDuration = (departure: string, arrival: string): string => {
+  if (!departure || !arrival) return ''
+
+  // Parse times in HH:MM format
+  const [depHour, depMin] = departure.split(':').map(Number)
+  const [arrHour, arrMin] = arrival.split(':').map(Number)
+
+  let depMinutes = depHour * 60 + depMin
+  let arrMinutes = arrHour * 60 + arrMin
+
+  // Handle overnight journeys (arrival time is on next day)
+  if (arrMinutes <= depMinutes) {
+    arrMinutes += 24 * 60 // Add 24 hours
+  }
+
+  const totalMinutes = arrMinutes - depMinutes
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+
+  if (minutes === 0) {
+    return `${hours}h`
+  }
+  return `${hours}h ${minutes}m`
+}
+
 export default function AdminDashboard({
   trains,
   onAddTrain,
@@ -54,10 +80,20 @@ export default function AdminDashboard({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
+    const updatedForm = {
+      ...formData,
       [name]: name === 'totalSeats' || name === 'price' ? parseFloat(value) : value
-    }))
+    }
+
+    // Auto-calculate duration when departure or arrival time changes
+    if (name === 'departure' || name === 'arrival') {
+      updatedForm.duration = calculateDuration(
+        name === 'departure' ? value : updatedForm.departure,
+        name === 'arrival' ? value : updatedForm.arrival
+      )
+    }
+
+    setFormData(updatedForm)
   }
 
   const handleDayToggle = (day: string) => {
@@ -121,18 +157,20 @@ export default function AdminDashboard({
   }
 
   const handleEdit = (train: Train) => {
-    setFormData({
+    const updatedFormData = {
       name: train.name,
       from: train.from,
       to: train.to,
       departure: train.departure,
       arrival: train.arrival,
       duration: train.duration,
-
       totalSeats: train.totalSeats,
       price: train.price,
       daysRunning: train.daysRunning ? train.daysRunning.split(',') : DAYS_OF_WEEK
-    })
+    }
+    // Recalculate duration from the times
+    updatedFormData.duration = calculateDuration(train.departure, train.arrival)
+    setFormData(updatedFormData)
     setEditingId(train.id)
     setShowForm(true)
   }
@@ -289,14 +327,14 @@ export default function AdminDashboard({
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="duration">Duration</label>
+                  <label htmlFor="duration">Duration (Auto-calculated)</label>
                   <input
                     id="duration"
                     type="text"
                     name="duration"
                     value={formData.duration}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 10h 30m"
+                    disabled
+                    placeholder="Auto-calculated from times"
                   />
                 </div>
               </div>
