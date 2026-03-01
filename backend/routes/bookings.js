@@ -1,6 +1,7 @@
 import express from 'express';
 import db from '../db/database.js';
 import { requireAuth } from '../middleware/authMiddleware.js'; 
+import crypto from 'crypto';
 
 const router = express.Router();
 
@@ -97,7 +98,7 @@ router.post('/', requireAuth, (req, res) => {
       return res.status(400).json({ success: false, error: `Only ${availableSeatsForDate} seats available on ${travelDate}` });
     }
 
-    const bookingId = Date.now().toString();
+    const bookingId = crypto.randomUUID();
     const totalPrice = train.price_per_seat * passengers;
     const bookingDate = new Date().toLocaleDateString();
 

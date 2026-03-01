@@ -103,12 +103,15 @@
   color: var(--gray-400);
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', monospace;
   margin: 0;
+  word-break: break-all;
 }
 
 /* ===== Status Badge ===== */
 .booking-status {
   display: flex;
   gap: 0.375rem;
+  flex-shrink: 0;
+  margin-left: 1rem;
 }
 
 .status-badge {
