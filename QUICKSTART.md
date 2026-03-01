@@ -2,16 +2,16 @@
 
 ## Starting the Application
 
-### 1️⃣ Start Backend Server (Terminal 1)
+### 1. Start Backend Server (Terminal 1)
 ```bash
-cd /Users/harshul/Rail_Connect/backend
+cd Rail_Connect/backend
 npm start
 ```
 
 Expected output:
 ```
-🚀 Server is running on http://localhost:3001
-📚 API Documentation:
+Server is running on http://localhost:3001
+API Documentation:
    GET  http://localhost:3001/api/trains
    POST http://localhost:3001/api/bookings
    ...
@@ -19,9 +19,9 @@ Connected to SQLite database
 Database initialized
 ```
 
-### 2️⃣ Start Frontend Server (Terminal 2)
+### 2. Start Frontend Server (Terminal 2)
 ```bash
-cd /Users/harshul/Rail_Connect
+cd Rail_Connect
 npm run dev
 ```
 
@@ -32,7 +32,7 @@ Expected output:
   ➜  Local:   http://localhost:5173/
 ```
 
-### 3️⃣ Open the Application
+### 3. Open the Application
 - Open your browser and go to: **http://localhost:5173**
 
 ---
@@ -79,7 +79,7 @@ Expected output:
 
 ### 🔄 Refreshing Data
 
-- Click the **"🔄 Refresh"** button in the header to sync with the latest database state
+- Click the **"Refresh"** button in the header to sync with the latest database state
 - Useful after cancellations or when another user makes changes
 
 ---
@@ -245,14 +245,13 @@ npm run dev      # Start with auto-reload on file changes
 - Responsive design for all devices
 - Error handling and user feedback
 - API documentation
+- User authentication/login
 
 ⚠️ **Not Implemented (For Future):**
-- User authentication/login
 - Payment processing
 - Email notifications
 - Seat selection interface
 - User profiles/history
-
 ---
 
 ## Getting Help
@@ -264,4 +263,4 @@ For detailed information:
 
 ---
 
-Happy Booking! 🚂✨
+Happy Booking!!

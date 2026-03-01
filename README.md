@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 # Rail Connect - Train Booking Web Application
 
 A full-stack, modern web application for searching and booking train tickets. This project demonstrates complete CRUD operations with a responsive React frontend, Express.js backend, and SQLite database.
 
-## 🎯 Features
+## Key Features
 
 ### Frontend Features
 - **Search Trains**: Filter trains by source and destination stations
@@ -22,7 +21,7 @@ A full-stack, modern web application for searching and booking train tickets. Th
 - **CORS Support**: Secure cross-origin requests from frontend
 - **Health Checks**: API health endpoint for monitoring
 
-## 📊 Project Structure
+## Project Structure
 
 ```
 Rail_Connect/
@@ -57,7 +56,7 @@ Rail_Connect/
 └── README.md                # This file
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js v16 or higher
@@ -68,7 +67,7 @@ Rail_Connect/
 
 1. **Clone/Open the project**
    ```bash
-   cd /Users/harshul/Rail_Connect
+   cd ./Rail_Connect
    ```
 
 2. **Install Frontend Dependencies**
@@ -339,4 +338,3 @@ This project is open source and available for educational purposes.
 Built with ❤️ using React, Express, and SQLite
 =======
 # IRCTC_PROJECT
->>>>>>> 9e58aab4f7b13ec1de020d7827e57ca129a24144
