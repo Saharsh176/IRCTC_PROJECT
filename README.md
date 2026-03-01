@@ -99,7 +99,7 @@ The application uses these ports:
 - Frontend: `http://localhost:5173`
 - Backend API: `http://localhost:3001/api`
 
-## 💻 Technology Stack
+## Technology Stack
 
 ### Frontend
 - **React 18.3** - UI framework with TypeScript
@@ -112,7 +112,7 @@ The application uses these ports:
 - **Node.js** - JavaScript runtime
 - **CORS** - Cross-Origin Resource Sharing
 
-## 📝 CRUD Operations
+## CRUD Operations
 
 The application fully implements all CRUD operations:
 
@@ -139,7 +139,7 @@ The application fully implements all CRUD operations:
 - Delete trains: `DELETE /api/trains/:id`
 - Associated seat counts automatically adjusted
 
-## 🗄️ Database
+## Database
 
 ### SQLite Tables
 
@@ -184,7 +184,7 @@ The database is automatically initialized with 5 sample trains:
 
 For detailed API documentation, see [backend/README.md](backend/README.md)
 
-## 🎨 User Interface
+## User Interface
 
 ### Header Navigation
 - Application title with icon
@@ -211,7 +211,7 @@ For detailed API documentation, see [backend/README.md](backend/README.md)
 - Cancel button for each booking
 - Empty state when no bookings exist
 
-## 🔄 How Booking Works
+## How Booking Works
 
 1. **User searches trains** → API filters and returns matching trains
 2. **User selects train** → Card expands to show booking options
@@ -224,7 +224,7 @@ For detailed API documentation, see [backend/README.md](backend/README.md)
 9. **Backend cancels** → Deletes booking, restores seats
 10. **Database updated** → available_seats increased
 
-## 🚦 Running Examples
+## Running Examples
 
 ### Test API with curl
 
@@ -247,14 +247,14 @@ curl http://localhost:3001/api/bookings
 curl -X DELETE http://localhost:3001/api/bookings/BOOKING_ID
 ```
 
-## 📱 Responsive Design
+## Responsive Design
 
 The application is fully responsive with breakpoints:
 - **Desktop** (1024px+): Full grid layout with side-by-side elements
 - **Tablet** (768px-1024px): Adjusted grid, optimized spacing
 - **Mobile** (below 768px): Single column layout, touch-friendly buttons
 
-## ⚙️ Build & Deployment
+## Build & Deployment
 
 ### Development
 ```bash
@@ -272,7 +272,7 @@ npm run preview     # Preview production build locally
 - Frontend: Optimized JavaScript and CSS in `dist/`
 - Backend: Ready to deploy as Node.js application
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Frontend can't reach backend
 - Check backend is running on `http://localhost:3001`
@@ -293,7 +293,7 @@ rm backend/db/irctc.db
 cd backend && npm start
 ```
 
-## 🔐 Security Notes
+## Security Notes
 
 - No authentication required (as specified)
 - CORS enabled for all origins (development only)
@@ -305,7 +305,7 @@ cd backend && npm start
   - Use environment variables for config
   - Add rate limiting
 
-## 🚀 Future Enhancements
+## Future Enhancements
 
 - User authentication and profiles
 - Payment gateway integration
@@ -320,20 +320,19 @@ cd backend && npm start
 - Performance optimization with caching
 - Mobile app (React Native)
 
-## 📞 Support & Documentation
+## Support & Documentation
 
 - **Frontend**: See component source code in `src/components/`
 - **Backend**: See [backend/README.md](backend/README.md)
 - **Database**: SQLite file at `backend/db/irctc.db`
 - **API Testing**: Use curl, Postman, or browser DevTools
 
-## 📄 License
+## License
 
-This project is open source and available for educational purposes.
-
+This code is licensed under the [MIT License](LICENSE)
 ---
 
-**Happy Train Booking! 🚂**
+**Happy Train Booking!!**
 
 Built with ❤️ using React, Express, and SQLite
 =======
