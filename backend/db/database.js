@@ -2,8 +2,10 @@ import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 
 const dbPath = join(__dirname, 'irctc.db');
 
@@ -16,6 +18,14 @@ db.pragma('journal_mode = WAL');
 db.pragma('synchronous = NORMAL');
 
 export const initializeDatabase = async () => {
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
   db.exec(`
     CREATE TABLE IF NOT EXISTS trains (
       id TEXT PRIMARY KEY,
@@ -37,6 +47,7 @@ export const initializeDatabase = async () => {
   db.exec(`
     CREATE TABLE IF NOT EXISTS bookings (
       id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
       train_id TEXT NOT NULL,
       train_name TEXT NOT NULL,
       from_station TEXT NOT NULL,
@@ -46,14 +57,15 @@ export const initializeDatabase = async () => {
       booking_date TEXT NOT NULL,
       travel_date TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (train_id) REFERENCES trains(id)
+      FOREIGN KEY (train_id) REFERENCES trains(id),
+      FOREIGN KEY (user_id) REFERENCES users(id)
     )
   `);
 
   try { db.exec('ALTER TABLE trains ADD COLUMN journey_date TEXT'); } catch (e) {}
   try { db.exec('ALTER TABLE bookings ADD COLUMN travel_date TEXT'); } catch (e) {}
   try { db.exec('ALTER TABLE trains ADD COLUMN days_running TEXT'); } catch (e) {}
-
+  try { db.exec('ALTER TABLE bookings ADD COLUMN user_id TEXT'); } catch (e) {}
   const countRow = db.prepare('SELECT COUNT(*) as count FROM trains').get();
   
   if (countRow.count === 0) {

@@ -1,9 +1,31 @@
 const API_BASE_URL = 'http://localhost:3001/api';
 
-// Train API calls
+// Helper function to handle auth headers and token expiration
+const authFetch = async (url: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
+
+  const response = await fetch(url, { ...options, headers });
+
+  if (response.status === 401) {
+    // If token is invalid or expired, clear storage and force login
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+    throw new Error('Session expired. Please log in again.');
+  }
+
+  return response;
+};
+
+// --- Train API calls ---
 export const getTrain = async (id: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/trains/${id}`);
+    const response = await authFetch(`${API_BASE_URL}/trains/${id}`);
     if (!response.ok) throw new Error('Failed to fetch train');
     const data = await response.json();
     return data.data;
@@ -21,7 +43,7 @@ export const getTrains = async (filters?: { from?: string; to?: string; date?: s
     if (filters?.date) params.append('date', filters.date);
 
     const url = `${API_BASE_URL}/trains${params.toString() ? '?' + params.toString() : ''}`;
-    const response = await fetch(url);
+    const response = await authFetch(url);
     if (!response.ok) throw new Error('Failed to fetch trains');
     const data = await response.json();
     return data.data;
@@ -33,9 +55,8 @@ export const getTrains = async (filters?: { from?: string; to?: string; date?: s
 
 export const createTrain = async (trainData: any) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/trains`, {
+    const response = await authFetch(`${API_BASE_URL}/trains`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(trainData)
     });
     if (!response.ok) {
@@ -52,9 +73,8 @@ export const createTrain = async (trainData: any) => {
 
 export const updateTrain = async (id: string, trainData: any) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/trains/${id}`, {
+    const response = await authFetch(`${API_BASE_URL}/trains/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(trainData)
     });
     if (!response.ok) {
@@ -71,7 +91,7 @@ export const updateTrain = async (id: string, trainData: any) => {
 
 export const deleteTrain = async (id: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/trains/${id}`, {
+    const response = await authFetch(`${API_BASE_URL}/trains/${id}`, {
       method: 'DELETE'
     });
     if (!response.ok) {
@@ -86,10 +106,10 @@ export const deleteTrain = async (id: string) => {
   }
 };
 
-// Booking API calls
+// --- Booking API calls ---
 export const getBookings = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/bookings`);
+    const response = await authFetch(`${API_BASE_URL}/bookings`);
     if (!response.ok) throw new Error('Failed to fetch bookings');
     const data = await response.json();
     return data.data;
@@ -101,7 +121,7 @@ export const getBookings = async () => {
 
 export const getBooking = async (id: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/bookings/${id}`);
+    const response = await authFetch(`${API_BASE_URL}/bookings/${id}`);
     if (!response.ok) throw new Error('Failed to fetch booking');
     const data = await response.json();
     return data.data;
@@ -113,9 +133,8 @@ export const getBooking = async (id: string) => {
 
 export const createBooking = async (bookingData: { trainId: string; passengers: number; travelDate: string }) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/bookings`, {
+    const response = await authFetch(`${API_BASE_URL}/bookings`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(bookingData)
     });
     if (!response.ok) {
@@ -132,7 +151,7 @@ export const createBooking = async (bookingData: { trainId: string; passengers: 
 
 export const deleteBooking = async (id: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/bookings/${id}`, {
+    const response = await authFetch(`${API_BASE_URL}/bookings/${id}`, {
       method: 'DELETE'
     });
     if (!response.ok) throw new Error('Failed to delete booking');
@@ -142,4 +161,27 @@ export const deleteBooking = async (id: string) => {
     console.error('Error deleting booking:', error);
     throw error;
   }
+};
+
+// --- Auth API calls ---
+export const loginUser = async (credentials: any) => {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials)
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || 'Login failed');
+  return data;
+};
+
+export const registerUser = async (credentials: any) => {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials)
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || 'Registration failed');
+  return data;
 };

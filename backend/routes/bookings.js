@@ -1,5 +1,6 @@
 import express from 'express';
 import db from '../db/database.js';
+import { requireAuth } from '../middleware/authMiddleware.js'; 
 
 const router = express.Router();
 
@@ -15,10 +16,12 @@ const getAvailableSeatsForDate = (trainId, date) => {
   return train.total_seats - (bookedResult?.booked || 0);
 };
 
-// GET all bookings
-router.get('/', (req, res) => {
+// GET all bookings (Filtered by user_id)
+router.get('/', requireAuth, (req, res) => {
   try {
-    const rows = db.prepare('SELECT * FROM bookings ORDER BY created_at DESC').all();
+    const userId = req.user.id; // Get ID from token
+    // Filter by user_id
+    const rows = db.prepare('SELECT * FROM bookings WHERE user_id = ? ORDER BY created_at DESC').all(userId);
     const bookings = rows.map(booking => ({
       id: booking.id,
       trainId: booking.train_id,
@@ -38,13 +41,15 @@ router.get('/', (req, res) => {
 });
 
 // GET single booking
-router.get('/:id', (req, res) => {
+router.get('/:id', requireAuth, (req, res) => {
   const { id } = req.params;
+  const userId = req.user.id;
 
   try {
-    const row = db.prepare('SELECT * FROM bookings WHERE id = ?').get(id);
+    // Ensure the booking belongs to this specific user
+    const row = db.prepare('SELECT * FROM bookings WHERE id = ? AND user_id = ?').get(id, userId);
     if (!row) {
-      return res.status(404).json({ success: false, error: 'Booking not found' });
+      return res.status(404).json({ success: false, error: 'Booking not found or unauthorized' });
     }
 
     res.json({
@@ -67,8 +72,9 @@ router.get('/:id', (req, res) => {
 });
 
 // CREATE a new booking
-router.post('/', (req, res) => {
+router.post('/', requireAuth, (req, res) => {
   const { trainId, passengers, travelDate } = req.body;
+  const userId = req.user.id; // Get ID from token
 
   if (!trainId || !passengers || passengers < 1 || !travelDate) {
     return res.status(400).json({ success: false, error: 'Invalid train ID, passengers, or date' });
@@ -96,13 +102,13 @@ router.post('/', (req, res) => {
     const bookingDate = new Date().toLocaleDateString();
 
     const insertBooking = db.prepare(
-      `INSERT INTO bookings (id, train_id, train_name, from_station, to_station, num_passengers, total_price, booking_date, travel_date)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO bookings (id, user_id, train_id, train_name, from_station, to_station, num_passengers, total_price, booking_date, travel_date)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` // Added user_id parameter
     );
 
-    // Run atomically within a transaction (no need to update train table anymore)
+    // Run atomically within a transaction
     const performBooking = db.transaction(() => {
-      insertBooking.run(bookingId, trainId, train.name, train.from_station, train.to_station, passengers, totalPrice, bookingDate, travelDate);
+      insertBooking.run(bookingId, userId, trainId, train.name, train.from_station, train.to_station, passengers, totalPrice, bookingDate, travelDate);
     });
 
     performBooking();
@@ -132,20 +138,22 @@ router.post('/', (req, res) => {
 });
 
 // DELETE a booking (cancel booking)
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireAuth, (req, res) => {
   const { id } = req.params;
+  const userId = req.user.id;
 
   try {
-    const booking = db.prepare('SELECT * FROM bookings WHERE id = ?').get(id);
+    // Validate that the user actually owns this booking before deleting
+    const booking = db.prepare('SELECT * FROM bookings WHERE id = ? AND user_id = ?').get(id, userId);
     if (!booking) {
-      return res.status(404).json({ success: false, error: 'Booking not found' });
+      return res.status(404).json({ success: false, error: 'Booking not found or unauthorized' });
     }
 
-    const deleteBooking = db.prepare('DELETE FROM bookings WHERE id = ?');
+    const deleteBooking = db.prepare('DELETE FROM bookings WHERE id = ? AND user_id = ?');
 
-    // Run atomically within a transaction (no train table update needed)
+    // Run atomically within a transaction
     const cancelBooking = db.transaction(() => {
-      deleteBooking.run(id);
+      deleteBooking.run(id, userId);
     });
 
     cancelBooking();
