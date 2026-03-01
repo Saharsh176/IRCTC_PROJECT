@@ -4,6 +4,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import db, { initializeDatabase as initDb } from './db/database.js';
 import trainRoutes from './routes/trains.js';
 import bookingRoutes from './routes/bookings.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 const PORT = 3001;
@@ -21,6 +22,7 @@ initDb().then(() => {
 });
 
 // Routes
+app.use('/api/auth', authRoutes); 
 app.use('/api/trains', trainRoutes);
 app.use('/api/bookings', bookingRoutes);
 
