@@ -330,10 +330,12 @@ cd backend && npm start
 ## License
 
 This code is licensed under the [MIT License](LICENSE)
----
 
+
+---
+# IRCTC_PROJECT
 **Happy Train Booking!!**
 
 Built with ❤️ using React, Express, and SQLite
-=======
-# IRCTC_PROJECT
+
+
