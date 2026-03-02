@@ -1,0 +1,346 @@
+<svg width="3122pt" height="295pt" viewBox="0.00 0.00 3122.00 295.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 290.6)">
+<title>IRCTC_ER_Diagram</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-290.6 3117.67,-290.6 3117.67,4 -4,4"/>
+<!-- USERS -->
+<g id="node1" class="node">
+<title>USERS</title>
+<polygon fill="none" stroke="black" points="544.12,-286.6 479.88,-286.6 479.88,-250.6 544.12,-250.6 544.12,-286.6"/>
+<text xml:space="preserve" text-anchor="middle" x="512" y="-264.4" font-family="Helvetica,sans-Serif" font-size="14.00">USERS</text>
+</g>
+<!-- MAKES -->
+<g id="node4" class="node">
+<title>MAKES</title>
+<polygon fill="none" stroke="black" points="269,-197.8 205.58,-179.8 269,-161.8 332.42,-179.8 269,-197.8"/>
+<text xml:space="preserve" text-anchor="middle" x="269" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">MAKES</text>
+</g>
+<!-- USERS&#45;&#45;MAKES -->
+<g id="edge27" class="edge">
+<title>USERS--MAKES</title>
+<path fill="none" stroke="black" d="M479.48,-255.98C431.11,-238.71 341.1,-206.55 296.09,-190.48"/>
+<text xml:space="preserve" text-anchor="middle" x="415.77" y="-220" font-family="Times,serif" font-size="14.00">1</text>
+</g>
+<!-- u_id -->
+<g id="node6" class="node">
+<title>u_id</title>
+<ellipse fill="none" stroke="black" cx="395" cy="-179.8" rx="27" ry="18"/>
+<text xml:space="preserve" text-anchor="start" x="389.55" y="-176.6" font-family="Helvetica,sans-Serif" text-decoration="underline" font-size="14.00">id</text>
+</g>
+<!-- USERS&#45;&#45;u_id -->
+<g id="edge1" class="edge">
+<title>USERS--u_id</title>
+<path fill="none" stroke="black" d="M488.6,-250.24C466.2,-233.62 432.89,-208.91 412.63,-193.88"/>
+</g>
+<!-- u_username -->
+<g id="node7" class="node">
+<title>u_username</title>
+<ellipse fill="none" stroke="black" cx="512" cy="-179.8" rx="53.98" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="512" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">username</text>
+</g>
+<!-- USERS&#45;&#45;u_username -->
+<g id="edge2" class="edge">
+<title>USERS--u_username</title>
+<path fill="none" stroke="black" d="M512,-250.45C512,-235.33 512,-213.41 512,-198.21"/>
+</g>
+<!-- u_password -->
+<g id="node8" class="node">
+<title>u_password</title>
+<ellipse fill="none" stroke="black" cx="654" cy="-179.8" rx="52.37" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="654" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">password</text>
+</g>
+<!-- USERS&#45;&#45;u_password -->
+<g id="edge3" class="edge">
+<title>USERS--u_password</title>
+<path fill="none" stroke="black" d="M540.39,-250.24C566.29,-234.41 604.2,-211.24 628.98,-196.09"/>
+</g>
+<!-- u_created_at -->
+<g id="node9" class="node">
+<title>u_created_at</title>
+<ellipse fill="none" stroke="black" cx="799" cy="-179.8" rx="56.67" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="799" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">created_at</text>
+</g>
+<!-- USERS&#45;&#45;u_created_at -->
+<g id="edge4" class="edge">
+<title>USERS--u_created_at</title>
+<path fill="none" stroke="black" d="M544.36,-257.81C597.14,-241.85 701.59,-210.26 758.95,-192.91"/>
+</g>
+<!-- TRAINS -->
+<g id="node2" class="node">
+<title>TRAINS</title>
+<polygon fill="none" stroke="black" points="2007.67,-286.6 1940.33,-286.6 1940.33,-250.6 2007.67,-250.6 2007.67,-286.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1974" y="-264.4" font-family="Helvetica,sans-Serif" font-size="14.00">TRAINS</text>
+</g>
+<!-- RESERVED_IN -->
+<g id="node5" class="node">
+<title>RESERVED_IN</title>
+<polygon fill="none" stroke="black" points="1004,-197.8 892.01,-179.8 1004,-161.8 1115.99,-179.8 1004,-197.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1004" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">RESERVED_IN</text>
+</g>
+<!-- TRAINS&#45;&#45;RESERVED_IN -->
+<g id="edge29" class="edge">
+<title>TRAINS--RESERVED_IN</title>
+<path fill="none" stroke="black" d="M1940.12,-267.46C1839.66,-266.72 1534.77,-262.02 1284,-232.6 1200.29,-222.78 1103.88,-203.06 1048.82,-190.99"/>
+<text xml:space="preserve" text-anchor="middle" x="1287.5" y="-220" font-family="Times,serif" font-size="14.00">1</text>
+</g>
+<!-- t_id -->
+<g id="node10" class="node">
+<title>t_id</title>
+<ellipse fill="none" stroke="black" cx="1179" cy="-179.8" rx="27" ry="18"/>
+<text xml:space="preserve" text-anchor="start" x="1173.55" y="-176.6" font-family="Helvetica,sans-Serif" text-decoration="underline" font-size="14.00">id</text>
+</g>
+<!-- TRAINS&#45;&#45;t_id -->
+<g id="edge5" class="edge">
+<title>TRAINS--t_id</title>
+<path fill="none" stroke="black" d="M1939.83,-266.7C1853.37,-264.15 1618.96,-255.51 1425,-232.6 1334.96,-221.97 1311.47,-221.66 1224,-197.8 1216.59,-195.78 1208.69,-193.01 1201.62,-190.3"/>
+</g>
+<!-- t_name -->
+<g id="node11" class="node">
+<title>t_name</title>
+<ellipse fill="none" stroke="black" cx="1277" cy="-179.8" rx="35.19" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1277" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">name</text>
+</g>
+<!-- TRAINS&#45;&#45;t_name -->
+<g id="edge6" class="edge">
+<title>TRAINS--t_name</title>
+<path fill="none" stroke="black" d="M1940.03,-266.63C1843.43,-263.3 1559.29,-249.49 1330,-197.8 1321.89,-195.97 1313.25,-193.45 1305.35,-190.92"/>
+</g>
+<!-- t_from -->
+<g id="node12" class="node">
+<title>t_from</title>
+<ellipse fill="none" stroke="black" cx="1412" cy="-179.8" rx="64.17" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1412" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">from_station</text>
+</g>
+<!-- TRAINS&#45;&#45;t_from -->
+<g id="edge7" class="edge">
+<title>TRAINS--t_from</title>
+<path fill="none" stroke="black" d="M1940.1,-263.56C1861.43,-254 1660.46,-228.45 1494,-197.8 1483.56,-195.88 1472.41,-193.67 1461.8,-191.5"/>
+</g>
+<!-- t_to -->
+<g id="node13" class="node">
+<title>t_to</title>
+<ellipse fill="none" stroke="black" cx="1565" cy="-179.8" rx="52.91" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1565" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">to_station</text>
+</g>
+<!-- TRAINS&#45;&#45;t_to -->
+<g id="edge8" class="edge">
+<title>TRAINS--t_to</title>
+<path fill="none" stroke="black" d="M1939.86,-260.92C1878.78,-248.88 1746.83,-222.5 1636,-197.8 1626.6,-195.7 1616.52,-193.35 1607,-191.09"/>
+</g>
+<!-- t_dep -->
+<g id="node14" class="node">
+<title>t_dep</title>
+<ellipse fill="none" stroke="black" cx="1730" cy="-179.8" rx="75.99" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1730" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">departure_time</text>
+</g>
+<!-- TRAINS&#45;&#45;t_dep -->
+<g id="edge9" class="edge">
+<title>TRAINS--t_dep</title>
+<path fill="none" stroke="black" d="M1940.07,-255.53C1895.81,-239.79 1818.44,-212.26 1770.96,-195.37"/>
+</g>
+<!-- t_arr -->
+<g id="node15" class="node">
+<title>t_arr</title>
+<ellipse fill="none" stroke="black" cx="1903" cy="-179.8" rx="60.94" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1903" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">arrival_time</text>
+</g>
+<!-- TRAINS&#45;&#45;t_arr -->
+<g id="edge10" class="edge">
+<title>TRAINS--t_arr</title>
+<path fill="none" stroke="black" d="M1959.97,-250.45C1947.44,-235.14 1929.2,-212.83 1916.76,-197.62"/>
+</g>
+<!-- t_dur -->
+<g id="node16" class="node">
+<title>t_dur</title>
+<ellipse fill="none" stroke="black" cx="2046" cy="-179.8" rx="45.93" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="2046" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">duration</text>
+</g>
+<!-- TRAINS&#45;&#45;t_dur -->
+<g id="edge11" class="edge">
+<title>TRAINS--t_dur</title>
+<path fill="none" stroke="black" d="M1988.22,-250.45C2001.01,-235.04 2019.67,-212.54 2032.29,-197.32"/>
+</g>
+<!-- t_jdate -->
+<g id="node17" class="node">
+<title>t_jdate</title>
+<ellipse fill="none" stroke="black" cx="2195" cy="-179.8" rx="66.88" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="2195" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">journey_date</text>
+</g>
+<!-- TRAINS&#45;&#45;t_jdate -->
+<g id="edge12" class="edge">
+<title>TRAINS--t_jdate</title>
+<path fill="none" stroke="black" d="M2008.05,-254.23C2048.73,-238.25 2116.53,-211.62 2158.34,-195.2"/>
+</g>
+<!-- t_avail -->
+<g id="node18" class="node">
+<title>t_avail</title>
+<ellipse fill="none" stroke="black" cx="2375" cy="-179.8" rx="77.61" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="2375" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">available_seats</text>
+</g>
+<!-- TRAINS&#45;&#45;t_avail -->
+<g id="edge13" class="edge">
+<title>TRAINS--t_avail</title>
+<path fill="none" stroke="black" d="M2007.84,-260.27C2077.05,-245.29 2235.31,-211.04 2319.67,-192.78"/>
+</g>
+<!-- t_total -->
+<g id="node19" class="node">
+<title>t_total</title>
+<ellipse fill="none" stroke="black" cx="2546" cy="-179.8" rx="57.74" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="2546" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">total_seats</text>
+</g>
+<!-- TRAINS&#45;&#45;t_total -->
+<g id="edge14" class="edge">
+<title>TRAINS--t_total</title>
+<path fill="none" stroke="black" d="M2007.9,-263.83C2088.52,-254.64 2297.88,-229.52 2471,-197.8 2480.85,-196 2491.36,-193.79 2501.31,-191.57"/>
+</g>
+<!-- t_price -->
+<g id="node20" class="node">
+<title>t_price</title>
+<ellipse fill="none" stroke="black" cx="2715" cy="-179.8" rx="74.92" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="2715" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">price_per_seat</text>
+</g>
+<!-- TRAINS&#45;&#45;t_price -->
+<g id="edge15" class="edge">
+<title>TRAINS--t_price</title>
+<path fill="none" stroke="black" d="M2007.86,-265C2104.25,-257.38 2388.2,-233.36 2622,-197.8 2633.68,-196.02 2646.15,-193.9 2658.04,-191.77"/>
+</g>
+<!-- t_days -->
+<g id="node21" class="node">
+<title>t_days</title>
+<ellipse fill="none" stroke="black" cx="2895" cy="-179.8" rx="69.02" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="2895" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">days_running</text>
+</g>
+<!-- TRAINS&#45;&#45;t_days -->
+<g id="edge16" class="edge">
+<title>TRAINS--t_days</title>
+<path fill="none" stroke="black" d="M2007.93,-266.24C2121.61,-261.39 2499.22,-242.7 2808,-197.8 2819.27,-196.16 2831.29,-194.05 2842.69,-191.87"/>
+</g>
+<!-- t_created -->
+<g id="node22" class="node">
+<title>t_created</title>
+<ellipse fill="none" stroke="black" cx="3057" cy="-179.8" rx="56.67" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="3057" y="-175.6" font-family="Helvetica,sans-Serif" font-size="14.00">created_at</text>
+</g>
+<!-- TRAINS&#45;&#45;t_created -->
+<g id="edge17" class="edge">
+<title>TRAINS--t_created</title>
+<path fill="none" stroke="black" d="M2007.74,-267.43C2135.72,-266.32 2603.04,-258.12 2982,-197.8 2992.28,-196.16 3003.26,-193.95 3013.56,-191.65"/>
+</g>
+<!-- BOOKINGS -->
+<g id="node3" class="node">
+<title>BOOKINGS</title>
+<polygon fill="none" stroke="black" points="681.34,-109 590.66,-109 590.66,-73 681.34,-73 681.34,-109"/>
+<text xml:space="preserve" text-anchor="middle" x="636" y="-86.8" font-family="Helvetica,sans-Serif" font-size="14.00">BOOKINGS</text>
+</g>
+<!-- b_id -->
+<g id="node23" class="node">
+<title>b_id</title>
+<ellipse fill="none" stroke="black" cx="27" cy="-18" rx="27" ry="18"/>
+<text xml:space="preserve" text-anchor="start" x="21.55" y="-14.8" font-family="Helvetica,sans-Serif" text-decoration="underline" font-size="14.00">id</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_id -->
+<g id="edge18" class="edge">
+<title>BOOKINGS--b_id</title>
+<path fill="none" stroke="black" d="M590.38,-89.71C493.58,-88.22 260.99,-79.92 72,-36 64.35,-34.22 56.26,-31.46 49.07,-28.67"/>
+</g>
+<!-- b_tname -->
+<g id="node24" class="node">
+<title>b_tname</title>
+<ellipse fill="none" stroke="black" cx="149" cy="-18" rx="59.35" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="149" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">train_name</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_tname -->
+<g id="edge19" class="edge">
+<title>BOOKINGS--b_tname</title>
+<path fill="none" stroke="black" d="M590.42,-85.24C514.68,-77.04 358.23,-58.92 227,-36 216.62,-34.19 205.53,-31.95 195.07,-29.71"/>
+</g>
+<!-- b_from -->
+<g id="node25" class="node">
+<title>b_from</title>
+<ellipse fill="none" stroke="black" cx="309" cy="-18" rx="64.17" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="309" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">from_station</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_from -->
+<g id="edge20" class="edge">
+<title>BOOKINGS--b_from</title>
+<path fill="none" stroke="black" d="M590.19,-80.05C529.11,-66.79 421.41,-43.41 358.51,-29.75"/>
+</g>
+<!-- b_to -->
+<g id="node26" class="node">
+<title>b_to</title>
+<ellipse fill="none" stroke="black" cx="462" cy="-18" rx="52.91" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="462" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">to_station</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_to -->
+<g id="edge21" class="edge">
+<title>BOOKINGS--b_to</title>
+<path fill="none" stroke="black" d="M593.43,-72.63C563.05,-60.23 522.78,-43.8 494.86,-32.41"/>
+</g>
+<!-- b_pax -->
+<g id="node27" class="node">
+<title>b_pax</title>
+<ellipse fill="none" stroke="black" cx="636" cy="-18" rx="85.12" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="636" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">num_passengers</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_pax -->
+<g id="edge22" class="edge">
+<title>BOOKINGS--b_pax</title>
+<path fill="none" stroke="black" d="M636,-72.81C636,-61.65 636,-47.16 636,-36.03"/>
+</g>
+<!-- b_price -->
+<g id="node28" class="node">
+<title>b_price</title>
+<ellipse fill="none" stroke="black" cx="813" cy="-18" rx="55.59" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="813" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">total_price</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_price -->
+<g id="edge23" class="edge">
+<title>BOOKINGS--b_price</title>
+<path fill="none" stroke="black" d="M679.3,-72.63C710,-60.32 750.63,-44.02 779.01,-32.64"/>
+</g>
+<!-- b_bdate -->
+<g id="node29" class="node">
+<title>b_bdate</title>
+<ellipse fill="none" stroke="black" cx="974" cy="-18" rx="69.03" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="974" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">booking_date</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_bdate -->
+<g id="edge24" class="edge">
+<title>BOOKINGS--b_bdate</title>
+<path fill="none" stroke="black" d="M681.58,-80.42C743.93,-67.33 855.55,-43.88 921.38,-30.05"/>
+</g>
+<!-- b_tdate -->
+<g id="node30" class="node">
+<title>b_tdate</title>
+<ellipse fill="none" stroke="black" cx="1138" cy="-18" rx="58.82" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1138" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">travel_date</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_tdate -->
+<g id="edge25" class="edge">
+<title>BOOKINGS--b_tdate</title>
+<path fill="none" stroke="black" d="M681.8,-85.56C759.92,-77.68 923.78,-59.81 1061,-36 1071.25,-34.22 1082.2,-32 1092.53,-29.76"/>
+</g>
+<!-- b_created -->
+<g id="node31" class="node">
+<title>b_created</title>
+<ellipse fill="none" stroke="black" cx="1289" cy="-18" rx="56.67" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="1289" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00">created_at</text>
+</g>
+<!-- BOOKINGS&#45;&#45;b_created -->
+<g id="edge26" class="edge">
+<title>BOOKINGS--b_created</title>
+<path fill="none" stroke="black" d="M681.67,-87.81C779.81,-82.64 1017.89,-67.69 1215,-36 1225.02,-34.39 1235.71,-32.21 1245.76,-29.95"/>
+</g>
+<!-- MAKES&#45;&#45;BOOKINGS -->
+<g id="edge28" class="edge">
+<title>MAKES--BOOKINGS</title>
+<path fill="none" stroke="black" d="M302.54,-170.87C368.54,-155.26 515.36,-120.53 590.21,-102.83"/>
+<text xml:space="preserve" text-anchor="middle" x="490.43" y="-131.2" font-family="Times,serif" font-size="14.00">N</text>
+</g>
+<!-- RESERVED_IN&#45;&#45;BOOKINGS -->
+<g id="edge30" class="edge">
+<title>RESERVED_IN--BOOKINGS</title>
+<path fill="none" stroke="black" d="M959.98,-168.42C889.77,-151.86 753.12,-119.62 681.81,-102.8"/>
+<text xml:space="preserve" text-anchor="middle" x="858.02" y="-131.2" font-family="Times,serif" font-size="14.00">N</text>
+</g>
+</g>
+</svg>
