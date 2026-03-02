@@ -1,4 +1,4 @@
-# Rail Connect - Train Booking Web Application (IRCTC Clone)
+# Rail Connect - Train Booking Web Application
 
 A full-stack, modern web application for searching and booking train tickets. This project demonstrates complete database design, integrity constraint enforcement, and full CRUD operations with a responsive React frontend, Express.js backend, and SQLite database.
 
@@ -69,7 +69,7 @@ erDiagram
 ### 2. Chen's Notation
 ![ER Diagram](./ER_Chen.svg)
 ---
-
+*(Note regarding Weak Entities: No weak entities are present in this schema. All entities, including BOOKINGS, possess their own independent surrogate primary keys (`id`), making them strong entities.)*
 ## Relational Schema Mapping
 
 * **USERS** (<u>id</u>, username, password, created_at)
@@ -131,8 +131,12 @@ erDiagram
 * Cancel bookings and dynamically remove records from the database.
 
 ---
-
-## Impressive Software Feats & Architecture
+## Description of the Front-End Interface
+The user interface is built with React and features a responsive, mobile-friendly design consisting of two primary views:
+1. **Train Search & Booking Interface:** Users can select source and destination stations from dropdowns. The UI dynamically renders available trains as expandable cards showing departure times, duration, price, and a real-time count of available seats. Users can select passenger counts and trigger the booking workflow directly from the card.
+2. **User Dashboard (My Bookings):** A dedicated view where users can retrieve their entire booking history. It displays aggregate statistics (total spent, tickets booked) and provides individual "Cancel Booking" buttons for instant data deletion and ticket refunds.
+3. **Admin Login and Dashboard:** A dedicated view where admin can add or edit train details / capacity.
+## Software Feats and Architechture
 
 1. **Atomic Transaction Simulation:** When a booking is created, the system validates seat availability, creates the booking record, and deducts the available seats from the `trains` table in a strictly managed sequence. If one fails, the operation errors out, preventing overbooking.
 2. **Real-time Data Synchronization:** The frontend instantly updates the UI state (available seats, booking lists) based on immediate database confirmations, acting as the single source of truth.
@@ -173,8 +177,5 @@ npm run dev
 # App opens at http://localhost:5173
 ```
 
-
-
-```
-
-```
+## Database Initialization & Sample Data
+Upon first run, the SQLite database automatically initializes the relational tables and populates the `TRAINS` table with 5 representative sample train routes (e.g., Rajdhani Express, Shatabdi Express) across major cities with pre-configured seating and pricing data to allow for immediate testing.
