@@ -55,6 +55,53 @@ Rail_Connect/
 │
 └── README.md                # This file
 ```
+## Database Schema
+
+Here is the Entity-Relationship (ER) diagram for the IRCTC database:
+
+```mermaid
+erDiagram
+    USERS {
+        TEXT id PK "Primary Key"
+        TEXT username "Unique"
+        TEXT password
+        DATETIME created_at "Default CURRENT_TIMESTAMP"
+    }
+
+    TRAINS {
+        TEXT id PK "Primary Key"
+        TEXT name
+        TEXT from_station
+        TEXT to_station
+        TEXT departure_time
+        TEXT arrival_time
+        TEXT duration
+        TEXT journey_date
+        INTEGER available_seats
+        INTEGER total_seats
+        REAL price_per_seat
+        TEXT days_running
+        DATETIME created_at "Default CURRENT_TIMESTAMP"
+    }
+
+    BOOKINGS {
+        TEXT id PK "Primary Key"
+        TEXT user_id FK "Foreign Key referencing USERS(id)"
+        TEXT train_id FK "Foreign Key referencing TRAINS(id)"
+        TEXT train_name "Denormalized data"
+        TEXT from_station "Denormalized data"
+        TEXT to_station "Denormalized data"
+        INTEGER num_passengers
+        REAL total_price
+        TEXT booking_date
+        TEXT travel_date
+        DATETIME created_at "Default CURRENT_TIMESTAMP"
+    }
+
+    USERS ||--o{ BOOKINGS : "makes"
+    TRAINS ||--o{ BOOKINGS : "is reserved in"
+
+```
 
 ## Getting Started
 
